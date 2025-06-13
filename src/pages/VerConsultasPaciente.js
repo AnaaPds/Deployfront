@@ -11,7 +11,7 @@ function VerConsultasPaciente() {
   const [filtroData, setFiltroData] = useState('');
   const navigate = useNavigate();
 
-  const API_BASE = "http://localhost:8080/consultas";
+  const API_BASE = "https://clinica-axcehzebdvdxd8fa.brazilsouth-01.azurewebsites.net/consultas";
 
   useEffect(() => {
     const idPaciente = localStorage.getItem("pacienteId");
