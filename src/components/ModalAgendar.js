@@ -23,7 +23,7 @@ function ModalAgendar({ procedimento, onClose, onConfirm }) {
     }
 
     setCarregandoProfissionais(true);
-    axios.get('http://localhost:8080/profissionais/todos', {
+    axios.get('https://clinica-axcehzebdvdxd8fa.brazilsouth-01.azurewebsites.net/profissionais/todos', {
       headers: { Authorization: 'Bearer ' + token }
     })
       .then(response => setListaDeProfissionais(response.data))
@@ -74,7 +74,7 @@ function ModalAgendar({ procedimento, onClose, onConfirm }) {
 
     console.log('Dados da consulta:', dadosConsulta);
 
-    axios.post('http://localhost:8080/consultas', dadosConsulta, {
+    axios.post('https://clinica-axcehzebdvdxd8fa.brazilsouth-01.azurewebsites.net/consultas', dadosConsulta, {
       headers: {
         Authorization: 'Bearer ' + token,
         'Content-Type': 'application/json'
