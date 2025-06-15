@@ -12,7 +12,7 @@ function LoginPaciente() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('https://projeto-clinica-cscsgyg9gkd4chbx.brazilsouth-01.azurewebsites.net/', { email, senha });
+      const response = await axios.post('https://projeto-clinica-cscsgyg9gkd4chbx.brazilsouth-01.azurewebsites.net/pacientes/login', { email, senha });
 
       // Extrai o token e os dados do paciente da resposta
       const token = response.data.token;
