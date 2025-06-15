@@ -47,24 +47,29 @@ function CadastroProfissional() {
 
       console.log('Resposta da API:', response.data);
 
-      const { token, profissional, id, nome: nomeResp } = response.data;
+      const profissional = response.data;
 
-      const idProfissional = profissional?.id || id;
-      const nomeProfissional = profissional?.nome || nomeResp;
-
-      if (!token || !idProfissional || !nomeProfissional) {
+      if (!profissional.id || !profissional.nome) {
         throw new Error('Dados incompletos retornados da API.');
       }
 
-      localStorage.setItem('tokenProfissional', token);
-      localStorage.setItem('idProfissional', idProfissional);
-      localStorage.setItem('nomeProfissional', nomeProfissional);
+      localStorage.setItem('idProfissional', profissional.id);
+      localStorage.setItem('nomeProfissional', profissional.nome);
 
       alert('Cadastro realizado com sucesso!');
       navigate('/home-profissional');
     } catch (error) {
       console.error('Erro no cadastro:', error);
-      alert('Erro ao cadastrar. Tente novamente.');
+
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        typeof error.response.data === 'string'
+      ) {
+        alert(error.response.data);
+      } else {
+        alert('Erro ao cadastrar. Tente novamente.');
+      }
     } finally {
       setLoading(false);
     }
