@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://clinica-axcehzebdvdxd8fa.brazilsouth-01.azurewebsites.net',
+  baseURL: 'https://projeto-clinica-cscsgyg9gkd4chbx.brazilsouth-01.azurewebsites.net/',
 });
 
 export const loginPaciente = async (email, senha) => {
