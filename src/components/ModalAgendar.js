@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import '../styles/ModalAgendar.css';
+import axios from 'axios';
 
 function ModalAgendar({ procedimento, onClose, onConfirm }) {
   const nomeSalvo = localStorage.getItem('pacienteNome');
@@ -15,32 +15,16 @@ function ModalAgendar({ procedimento, onClose, onConfirm }) {
   const [carregandoProfissionais, setCarregandoProfissionais] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      alert('Paciente não autenticado. Faça login.');
-      onClose();
-      return;
-    }
-
     setCarregandoProfissionais(true);
-    axios.get('https://projeto-clinica-cscsgyg9gkd4chbx.brazilsouth-01.azurewebsites.net/profissionais/todos', {
-      headers: { Authorization: 'Bearer ' + token }
-    })
+    axios.get('https://projeto-clinica-cscsgyg9gkd4chbx.brazilsouth-01.azurewebsites.net/profissionais/todos')
       .then(response => setListaDeProfissionais(response.data))
       .catch(() => alert('Erro ao carregar profissionais'))
       .finally(() => setCarregandoProfissionais(false));
-  }, [onClose]);
+  }, []);
 
   function handleAgendar() {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      alert('Paciente não autenticado. Faça login.');
-      return;
-    }
-
     const pacienteIdStr = localStorage.getItem('pacienteId');
     const pacienteId = parseInt(pacienteIdStr, 10);
-  
 
     if (!pacienteId || isNaN(pacienteId)) {
       alert('ID do paciente inválido. Faça login novamente.');
@@ -48,7 +32,6 @@ function ModalAgendar({ procedimento, onClose, onConfirm }) {
     }
 
     const medicoSelecionado = listaDeProfissionais.find(p => p.nome === profissional);
-
     if (!medicoSelecionado || !medicoSelecionado.id) {
       alert('Profissional não encontrado ou inválido.');
       return;
@@ -59,27 +42,17 @@ function ModalAgendar({ procedimento, onClose, onConfirm }) {
       return;
     }
 
-    // Formato ISO 8601 compatível com LocalDateTime do backend (sem timezone)
     const dataHora = `${data}T${horario}:00.000`;
-
     const dadosConsulta = {
       dataHora,
-      pacienteId: pacienteId, // ✅ Correto
-      profissionalId: medicoSelecionado.id, // ✅ Correto
+      pacienteId,
+      profissionalId: medicoSelecionado.id,
       observacoes,
       telefonePaciente: telefone,
       procedimento
     };
-    
 
-    console.log('Dados da consulta:', dadosConsulta);
-
-    axios.post('https://clinica-axcehzebdvdxd8fa.brazilsouth-01.azurewebsites.net/consultas', dadosConsulta, {
-      headers: {
-        Authorization: 'Bearer ' + token,
-        'Content-Type': 'application/json'
-      }
-    })
+    axios.post('https://clinica-axcehzebdvdxd8fa.brazilsouth-01.azurewebsites.net/consultas', dadosConsulta)
       .then(res => {
         alert('Consulta agendada com sucesso');
         if (onConfirm) onConfirm(res.data);
@@ -91,108 +64,104 @@ function ModalAgendar({ procedimento, onClose, onConfirm }) {
       });
   }
 
+  return React.createElement('div', { className: 'modal-overlay' },
+    React.createElement('div', { className: 'modal-content' },
+      React.createElement('button', { className: 'btn-fechar', onClick: onClose }, '×'),
+      React.createElement('h2', null, 'Agendar ' + procedimento),
 
+      // Especialidade
+      React.createElement('div', { className: 'form-group' },
+        React.createElement('label', null, 'Especialidade:'),
+        React.createElement('select', {
+          value: especialidade,
+          onChange: e => setEspecialidade(e.target.value)
+        },
+          React.createElement('option', { value: '' }, 'Selecione'),
+          React.createElement('option', { value: 'Preenchimento facial' }, 'Preenchimento facial'),
+          React.createElement('option', { value: 'Botox' }, 'Botox'),
+          React.createElement('option', { value: 'Laser' }, 'Laser'),
+          React.createElement('option', { value: 'Harmonização Facial' }, 'Harmonização Facial'),
+          React.createElement('option', { value: 'Limpeza de Pele' }, 'Limpeza de Pele'),
+          React.createElement('option', { value: 'Microagulhamento' }, 'Microagulhamento')
+        )
+      ),
 
-  return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <button className="btn-fechar" onClick={onClose}>×</button>
+      // Profissional
+      React.createElement('div', { className: 'form-group' },
+        React.createElement('label', null, 'Profissional:'),
+        React.createElement('select', {
+          value: profissional,
+          onChange: e => setProfissional(e.target.value),
+          disabled: carregandoProfissionais
+        },
+          React.createElement('option', { value: '' }, carregandoProfissionais ? 'Carregando profissionais...' : 'Selecione'),
+          ...listaDeProfissionais.map(p =>
+            React.createElement('option', { key: p.id, value: p.nome },
+              p.nome + ' - ' + p.especialidade
+            )
+          )
+        )
+      ),
 
-        <h2>Agendar {procedimento}</h2>
+      // Nome
+      React.createElement('div', { className: 'form-group' },
+        React.createElement('label', null, 'Seu Nome:'),
+        React.createElement('input', {
+          type: 'text',
+          placeholder: 'Digite seu nome',
+          value: nome,
+          onChange: e => setNome(e.target.value)
+        })
+      ),
 
-        <div className="form-group">
-          <label>Especialidade:</label>
-          <select value={especialidade} onChange={e => setEspecialidade(e.target.value)}>
-            <option value="">Selecione</option>
-            <option value="Preenchimento facial">Preenchimento facial</option>
-            <option value="Botox">Botox</option>
-            <option value="Laser">Laser</option>
-            <option value="Harmonização Facial">Harmonização Facial</option>
-            <option value="Limpeza de Pele">Limpeza de Pele</option>
-            <option value="Microagulhamento">Microagulhamento</option>
-          </select>
-        </div>
+      // Telefone
+      React.createElement('div', { className: 'form-group' },
+        React.createElement('label', null, 'Telefone:'),
+        React.createElement('input', {
+          type: 'tel',
+          placeholder: '(00) 00000-0000',
+          value: telefone,
+          onChange: e => setTelefone(e.target.value)
+        })
+      ),
 
-        <div className="form-group">
-          <label>Profissional:</label>
-          <select
-            value={profissional}
-            onChange={e => setProfissional(e.target.value)}
-            disabled={carregandoProfissionais}
-          >
-            <option value="">{carregandoProfissionais ? 'Carregando profissionais...' : 'Selecione'}</option>
-            {listaDeProfissionais.map(p => (
-              <option key={p.id} value={p.nome}>
-                {p.nome} - {p.especialidade}
-              </option>
-            ))}
-          </select>
-        </div>
+      // Data
+      React.createElement('div', { className: 'form-group' },
+        React.createElement('label', null, 'Data da Consulta:'),
+        React.createElement('input', {
+          type: 'date',
+          value: data,
+          onChange: e => setData(e.target.value)
+        })
+      ),
 
-        <div className="form-group">
-          <label>Seu Nome:</label>
-          <input
-            type="text"
-            placeholder="Digite seu nome"
-            value={nome}
-            onChange={e => setNome(e.target.value)}
-          />
-        </div>
+      // Horário
+      React.createElement('div', { className: 'form-group' },
+        React.createElement('label', null, 'Horário da Consulta:'),
+        React.createElement('input', {
+          type: 'time',
+          value: horario,
+          onChange: e => setHorario(e.target.value)
+        })
+      ),
 
-        <div className="form-group">
-          <label>Telefone:</label>
-          <input
-            type="tel"
-            placeholder="(00) 00000-0000"
-            value={telefone}
-            onChange={e => setTelefone(e.target.value)}
-          />
-        </div>
+      // Observações
+      React.createElement('div', { className: 'form-group' },
+        React.createElement('label', null, 'Observações:'),
+        React.createElement('textarea', {
+          placeholder: 'Ex: Quero que seja no período da manhã',
+          value: observacoes,
+          onChange: e => setObservacoes(e.target.value)
+        })
+      ),
 
-        <div className="form-group">
-          <label>Data da Consulta:</label>
-          <input
-            type="date"
-            value={data}
-            onChange={e => setData(e.target.value)}
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Horário da Consulta:</label>
-          <input
-            type="time"
-            value={horario}
-            onChange={e => setHorario(e.target.value)}
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Observações:</label>
-          <textarea
-            placeholder="Ex: Quero que seja no período da manhã"
-            value={observacoes}
-            onChange={e => setObservacoes(e.target.value)}
-          />
-        </div>
-
-        <button
-          className="btn-agendar"
-          onClick={handleAgendar}
-          disabled={
-            !especialidade ||
-            !profissional ||
-            !nome ||
-            !telefone ||
-            !data ||
-            !horario ||
-            carregandoProfissionais
-          }
-        >
-          {carregandoProfissionais ? 'Carregando...' : 'Agendar'}
-        </button>
-      </div>
-    </div>
+      // Botão Agendar
+      React.createElement('button', {
+        className: 'btn-agendar',
+        onClick: handleAgendar,
+        disabled: !especialidade || !profissional || !nome || !telefone || !data || !horario || carregandoProfissionais
+      }, carregandoProfissionais ? 'Carregando...' : 'Agendar')
+    )
   );
 }
 
