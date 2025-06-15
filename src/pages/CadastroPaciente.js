@@ -15,7 +15,7 @@ function CadastroPaciente() {
   const handleCadastro = (e) => {
     e.preventDefault();
 
-    axios.post('https://clinica-axcehzebdvdxd8fa.brazilsouth-01.azurewebsites.net/pacientes/cadastrar', {
+    axios.post('https://projeto-clinica-cscsgyg9gkd4chbx.brazilsouth-01.azurewebsites.net/pacientes/cadastrar', {
 
       nome,
       dataNasc,
