@@ -19,7 +19,7 @@ function LoginProfissional() {
     }
 
     try {
-      const response = await axios.post('https://clinica-axcehzebdvdxd8fa.brazilsouth-01.azurewebsites.net/profissionais/login', {
+      const response = await axios.post('https://projeto-clinica-cscsgyg9gkd4chbx.brazilsouth-01.azurewebsites.net/profissionais/login', {
         email,
         senha,
       });
