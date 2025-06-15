@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../services/api';
 import '../styles/CadastroProfissional.css';
+import axios from 'axios';
 
 function CadastroProfissional() {
   const navigate = useNavigate();
@@ -34,19 +34,31 @@ function CadastroProfissional() {
     setLoading(true);
 
     try {
-      const response = await api.post('/profissionais/cadastrar', {
-        nome,
-        especialidade,
-        telefone,
-        email,
-        senha,
-      });
+      const response = await axios.post(
+        'https://projeto-clinica-cscsgyg9gkd4chbx.brazilsouth-01.azurewebsites.net/profissionais/cadastrar',
+        {
+          nome,
+          especialidade,
+          telefone,
+          email,
+          senha,
+        }
+      );
 
-      const { token, profissional } = response.data;
+      console.log('Resposta da API:', response.data);
+
+      const { token, profissional, id, nome: nomeResp } = response.data;
+
+      const idProfissional = profissional?.id || id;
+      const nomeProfissional = profissional?.nome || nomeResp;
+
+      if (!token || !idProfissional || !nomeProfissional) {
+        throw new Error('Dados incompletos retornados da API.');
+      }
 
       localStorage.setItem('tokenProfissional', token);
-      localStorage.setItem('idProfissional', profissional.id);
-      localStorage.setItem('nomeProfissional', profissional.nome);
+      localStorage.setItem('idProfissional', idProfissional);
+      localStorage.setItem('nomeProfissional', nomeProfissional);
 
       alert('Cadastro realizado com sucesso!');
       navigate('/home-profissional');
