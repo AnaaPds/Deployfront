@@ -11,7 +11,7 @@ function VerConsultasPaciente() {
   const [filtroData, setFiltroData] = useState('');
   const navigate = useNavigate();
 
-  const API_BASE = "https://clinica-axcehzebdvdxd8fa.brazilsouth-01.azurewebsites.net/consultas";
+  const API_BASE = "https://projeto-clinica-cscsgyg9gkd4chbx.brazilsouth-01.azurewebsites.net/consultas";
 
   useEffect(() => {
     const idPaciente = localStorage.getItem("pacienteId");
@@ -42,18 +42,23 @@ function VerConsultasPaciente() {
   }, [navigate]);
 
   const cancelarConsulta = (id) => {
-    fetch(`${API_BASE}/${id}`, {
-      method: 'DELETE',
+  const token = localStorage.getItem("token");
+
+  fetch(`https://projeto-clinica-cscsgyg9gkd4chbx.brazilsouth-01.azurewebsites.net/consultas/${id}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: token ? `Bearer ${token}` : "",
+    },
+  })
+    .then(res => {
+      if (res.status === 204) {
+        setConsultas(prev => prev.filter(c => c.id !== id));
+      } else {
+        alert("Erro ao cancelar consulta");
+      }
     })
-      .then(res => {
-        if (res.status === 204) {
-          setConsultas(prev => prev.filter(c => c.id !== id));
-        } else {
-          alert("Erro ao cancelar consulta");
-        }
-      })
-      .catch(() => alert("Erro ao cancelar consulta"));
-  };
+    .catch(() => alert("Erro ao cancelar consulta"));
+};
 
   const iniciarRemarcacao = (id) => {
     setEditId(id);
@@ -65,34 +70,40 @@ function VerConsultasPaciente() {
   };
 
   const confirmarRemarcacao = () => {
-    if (!novaData.trim()) return;
+  if (!novaData.trim()) return;
 
-    const consulta = consultas.find(c => c.id === editId);
-    if (!consulta) return;
+  const consulta = consultas.find(c => c.id === editId);
+  if (!consulta) return;
 
-    const updatedConsulta = {
-      ...consulta,
-      dataHora: novaData, // <- CORREÇÃO: usar dataHora
-    };
-
-    fetch(`${API_BASE}/${editId}`, {
-      method: 'PUT',
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedConsulta),
-    })
-      .then(res => {
-        if (!res.ok) throw new Error("Erro ao atualizar consulta");
-
-        setConsultas(prev =>
-          prev.map(c =>
-            c.id === editId ? { ...c, dataHora: novaData } : c
-          )
-        );
-        setEditId(null);
-        setNovaData('');
-      })
-      .catch(err => alert(err.message));
+  const updatedConsulta = {
+    ...consulta,
+    dataHora: novaData, // <- usando dataHora como campo correto
   };
+
+  const token = localStorage.getItem("token");
+
+  fetch(`https://projeto-clinica-cscsgyg9gkd4chbx.brazilsouth-01.azurewebsites.net/consultas/${editId}`, {
+    method: 'PUT',
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token ? `Bearer ${token}` : "",
+    },
+    body: JSON.stringify(updatedConsulta),
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("Erro ao atualizar consulta");
+
+      setConsultas(prev =>
+        prev.map(c =>
+          c.id === editId ? { ...c, dataHora: novaData } : c
+        )
+      );
+      setEditId(null);
+      setNovaData('');
+    })
+    .catch(err => alert(err.message));
+};
+
 
   function obterNomeProfissional(consulta) {
     if (consulta.nomeProfissional) return consulta.nomeProfissional;
