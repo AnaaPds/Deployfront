@@ -1,70 +1,90 @@
-# Getting Started with Create React App
+💆‍♀️ Clínica de Estética e Cosmética - Sistema Web
+Este projeto é um sistema completo para uma clínica de estética e cosmética, desenvolvido com foco em facilitar o agendamento e o gerenciamento de consultas tanto para pacientes quanto para profissionais da saúde estética.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+✨ Funcionalidades
+👩‍⚕️ Para o Paciente:
+Cadastro e login seguro
 
-## Available Scripts
+Escolha de procedimentos estéticos disponíveis
 
-In the project directory, you can run:
+Agendamento de consultas com:
 
-### `npm start`
+Nome do paciente
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Telefone
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Profissional desejado
 
-### `npm test`
+Procedimento
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Data, horário e observações
 
-### `npm run build`
+Visualização de todas as suas consultas
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Cancelamento e remarcação de consultas
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+🧑‍⚕️ Para o Profissional:
+Cadastro e login seguro
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Visualização de todas as consultas marcadas com ele
 
-### `npm run eject`
+Cancelamento de consultas
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Geração de relatórios em PDF com os agendamentos
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+🛠️ Tecnologias Utilizadas
+🔹 Front-end:
+React com JavaScript
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Axios para requisições HTTP
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Desenvolvido com Visual Studio Code
 
-## Learn More
+🔹 Back-end:
+Java com Spring Boot
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+IDE Eclipse
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Banco de dados MySQL
 
-### Code Splitting
+Testes com Postman
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+🔹 Segurança:
+BCrypt para criptografar senhas
 
-### Analyzing the Bundle Size
+JWT (JSON Web Token) para autenticação de usuários
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+CORS configurado para comunicação segura entre frontend e backend
 
-### Making a Progressive Web App
+☁️ Deploy
+Front-end: Vercel
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Back-end: Microsoft Azure
 
-### Advanced Configuration
+Banco de Dados: Aiven for MySQL
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+📄 Relatórios e PDF
+Profissionais têm acesso a um recurso exclusivo para exportar suas consultas em formato PDF, facilitando o acompanhamento e organização da agenda.
 
-### Deployment
+🔒 Autenticação
+Autenticação baseada em tokens JWT
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Todas as senhas são armazenadas de forma segura com bcrypt
 
-### `npm run build` fails to minify
+Middleware de proteção de rotas com verificação de permissões de acesso
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+🚀 Como rodar o projeto localmente
+Backend:
+1. Clone o repositório do backend
+2. Importe o projeto no Eclipse
+3. Configure o application.properties com seu banco de dados MySQL
+4. Rode a aplicação
+   
+Frontend:
+1. Clone o repositório do frontend
+2. Execute `npm install`
+3. Execute `npm start`
+   
+💡 Observações
+O sistema é dividido por permissões de acesso (paciente e profissional)
+Todo o fluxo de autenticação está protegido com tokens e criptografia
