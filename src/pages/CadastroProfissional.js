@@ -14,66 +14,57 @@ function CadastroProfissional() {
   const [loading, setLoading] = useState(false);
 
   const handleCadastro = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!nome || !especialidade || !telefone || !email || !senha) {
-      alert('Preencha todos os campos!');
-      return;
-    }
+  if (!nome || !especialidade || !telefone || !email || !senha) {
+    alert('Preencha todos os campos!');
+    return;
+  }
 
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      alert('Digite um email válido');
-      return;
-    }
+  if (!/\S+@\S+\.\S+/.test(email)) {
+    alert('Digite um email válido');
+    return;
+  }
 
-    if (senha.length < 6) {
-      alert('Senha deve ter no mínimo 6 caracteres');
-      return;
-    }
+  if (senha.length < 6) {
+    alert('Senha deve ter no mínimo 6 caracteres');
+    return;
+  }
 
-    setLoading(true);
+  setLoading(true);
 
-    try {
-      const response = await axios.post(
-        'https://projeto-clinica-cscsgyg9gkd4chbx.brazilsouth-01.azurewebsites.net/profissionais/cadastrar',
-        {
-          nome,
-          especialidade,
-          telefone,
-          email,
-          senha,
-        }
-      );
-
-      console.log('Resposta da API:', response.data);
-
-      const profissional = response.data;
-
-      if (!profissional.id || !profissional.nome) {
-        throw new Error('Dados incompletos retornados da API.');
+  try {
+    const response = await axios.post(
+      'https://projeto-clinica-cscsgyg9gkd4chbx.brazilsouth-01.azurewebsites.net/profissionais/cadastrar',
+      {
+        nome,
+        especialidade,
+        telefone,
+        email,
+        senha,
       }
+    );
 
-      localStorage.setItem('idProfissional', profissional.id);
-      localStorage.setItem('nomeProfissional', profissional.nome);
+    console.log('Resposta da API:', response.data);
 
-      alert('Cadastro realizado com sucesso!');
-      navigate('/home-profissional');
-    } catch (error) {
-      console.error('Erro no cadastro:', error);
+    const profissional = response.data;
 
-      if (
-        error.response &&
-        error.response.status === 400 &&
-        typeof error.response.data === 'string'
-      ) {
-        alert(error.response.data);
-      } else {
-        alert('Erro ao cadastrar. Tente novamente.');
-      }
-    } finally {
-      setLoading(false);
+    if (!profissional || !profissional.id || !profissional.nome) {
+      throw new Error('Dados incompletos retornados da API.');
     }
-  };
+
+    localStorage.setItem('idProfissional', profissional.id);
+    localStorage.setItem('nomeProfissional', profissional.nome);
+
+    alert('Cadastro realizado com sucesso! Agora faça login.');
+    navigate('/login-profissional');
+  } catch (error) {
+    console.error('Erro no cadastro:', error);
+    alert('Erro ao cadastrar. Tente novamente.');
+  } finally {
+    setLoading(false);
+  }
+};
 
   return React.createElement(
     'div',
