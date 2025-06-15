@@ -35,7 +35,7 @@ function CadastroProfissional() {
 
     try {
       const response = await axios.post(
-        'https://projeto-clinica-cscsgyg9gkd4chbx.brazilsouth-01.azurewebsites.net/profissionais/cadastrar',
+        'https://projeto-clinica-cscsgyg9gkd4chbx.brazilsouth-01.azurewebsites.net/profissional/cadastrar',
         {
           nome,
           especialidade,
