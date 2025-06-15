@@ -23,7 +23,7 @@ function ModalAgendar({ procedimento, onClose, onConfirm }) {
     }
 
     setCarregandoProfissionais(true);
-    axios.get('https://clinica-axcehzebdvdxd8fa.brazilsouth-01.azurewebsites.net/profissionais/todos', {
+    axios.get('https://projeto-clinica-cscsgyg9gkd4chbx.brazilsouth-01.azurewebsites.net/profissionais/todos', {
       headers: { Authorization: 'Bearer ' + token }
     })
       .then(response => setListaDeProfissionais(response.data))
