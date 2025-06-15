@@ -19,7 +19,7 @@ function ConsultasProfissional() {
       return;
     }
 
-    fetch("https://clinica-axcehzebdvdxd8fa.brazilsouth-01.azurewebsites.net/consultas/profissional" + idProfissional)
+    fetch("https://projeto-clinica-cscsgyg9gkd4chbx.brazilsouth-01.azurewebsites.net/consultas/profissional" + idProfissional)
       .then(async (res) => {
         if (res.status === 204) return [];
         if (!res.ok) throw new Error('Erro ao carregar consultas');
@@ -42,7 +42,7 @@ function ConsultasProfissional() {
 
     setCancelando(prev => new Set(prev).add(id));
 
-    fetch("https://clinica-axcehzebdvdxd8fa.brazilsouth-01.azurewebsites.net/consultas/" + id, { method: 'DELETE' })
+    fetch("https://projeto-clinica-cscsgyg9gkd4chbx.brazilsouth-01.azurewebsites.net/consultas/" + id, { method: 'DELETE' })
       .then(res => {
         setCancelando(prev => {
           const nova = new Set(prev);
